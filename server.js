@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express'); // Import the Express library
 const app = express(); // Initialize an Express application
 
@@ -5,6 +6,12 @@ const app = express(); // Initialize an Express application
 app.use(express.static('public'));
 
 const PORT = 3000; // Port to run your local server
+
+// API to send the OpenWeather API key to the frontend
+app.get('/api/config', (req, res) => {
+    res.json({ apiKey: process.env.OPENWEATHER_API_KEY });
+});
+
 
 // Middleware
 app.use(express.json()); // Automatically parse JSON request bodies

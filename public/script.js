@@ -5,13 +5,26 @@ navigator.geolocation.getCurrentPosition(
 
         // console.log(`Latitude: ${lat}, Longitude: ${lon}`);
 
+        // Function to fetch API key from the backend
+        const fetchApiKey = async () => {
+            try {
+                const response = await fetch('/api/config');
+                const data = await response.json();
+                return data.apiKey;
+            } catch (error) {
+                console.error("Error fetching API key:", error);
+                return null;
+            }
+        };
+
         document.getElementById("fetch-button").addEventListener("click", async () => {
+            const apiKey = await fetchApiKey();
+            if (!apiKey) {
+                console.error("API key is missing. Check your server.");
+                return;
+            }
 
-            const apiKey = '26991474c599204a4c3563a41548edb4'; // Replace with your actual API key
-
-            const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&units=metric&exclude=hourly,daily&appid=${apiKey}`;
-
-            // console.log(apiKey.data);
+            const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=hourly,daily&appid=${apiKey}`;
 
             try {
                 const response = await fetch(url);
